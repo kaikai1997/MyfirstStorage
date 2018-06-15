@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+  <style>
+    .panel-heading {
+      font-size: 20px;
+    }
+
+    .mask {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: none;
+    }
+
+    .addimg {
+      background: rgba(0, 0, 0, .3) url(images/loading.gif) center no-repeat;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse ">
+    <div class="container ">
+
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">黑马学生管理系统</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle " data-toggle="dropdown">Copyright © 2018</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class='container'>
+    <div class="panel panel-default">
+      <div class="panel-heading clearfix">
+        <span>学生基本信息管理</span>
+        <button class="btn btn-primary pull-right addbtn">添加学生信息</button>
+      </div>
+      <div class="panel-body">
+        <table class="table-bordered table">
+          <thead>
+            <tr>
+              <th width='10%'>序号</th>
+              <th width='10%'>姓名</th>
+              <th width='10%'>性别</th>
+              <th width='20%'>所属学院</th>
+              <th width='25%'>个人简介</th>
+              <th width='15%'>录入时间</th>
+              <th width='10%'>操作</th>
+            </tr>
+          </thead>
+          <tbody class="table-striped">
+            <!-- 坑  -->
+          </tbody>
+        </table>
+        
+        
+      </div>
+      <div class="text-right">
+        <ul id="paging"></ul>
+      </div>
+    </div>
+    <div class='mask'></div>
+  </div>
+  <!-- 删除模态框 -->
+  <div class="modal fade " tabindex="-1"  id='delete'>
+      <div class="modal-dialog modal-sm" >
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" ><span >&times;</span></button>
+            <h4 class="modal-title">删除学生信息</h4>
+          </div>
+          <div class="modal-body">
+            <p class='text-danger'>你是否要确定删除该学生的信息？</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary delete_make  ">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 增加模态框 -->
+    <div class="modal fade " tabindex="-1"  id='add'>
+      <div class="modal-dialog modal-xh" >
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" ><span >&times;</span></button>
+            <h4 class="modal-title">增加学生信息</h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <input type="text" class="form-control"  placeholder="请输入学生姓名" name='name'>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control"  placeholder="请输入学生性别" name="sex"> 
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control"  placeholder="请输入所属学院" name="academy">
+              </div>
+              <div class="form-group">
+                <textarea class="form-control" rows="3" placeholder="请输入所属描述" name="introduce"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary add_btn">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 修改模态框 -->
+    <div class="modal fade " tabindex="-1"  id='alter'>
+        <div class="modal-dialog modal-xh" >
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" ><span >&times;</span></button>
+              <h4 class="modal-title">修改学生信息</h4>
+            </div>
+            <div class="modal-body">
+              <form>
+                <input type="text" name="id" id = 'id' class="hide">
+                <div class="form-group">
+                  <input type="text" class="form-control"  placeholder="请输入学生姓名" name='name' id="name">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control"  placeholder="请输入学生性别" name="sex" id="sex"> 
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control"  placeholder="请输入所属学院" name="academy" id="academy">
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3" placeholder="请输入所属描述" name="introduce" id="introduce"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+              <button type="button" class="btn btn-primary alter_btn">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  <script src="lib/jquery/jquery-1.12.4.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.js"></script>
+  <script src="lib/artTemplate/template-web.js"></script>
+  <script src="lib/bootstrap-paginator/bootstrap-paginator.js"></script>
+  <script type="text/html" id="tpl">
+    {{each list v i}}
+    <tr>  
+        <td>{{(pageSize) * (pageNum - 1 ) + i + 1}}</td>
+        <td>{{v.name}}</td>
+        <td>{{v.sex}}</td>
+        <td>{{v.academy}}</td>
+        <td>{{v.introduce}}</td>
+        <td>{{v.createTime}}</td>
+        <td>
+          <a href="#" class='btn_alter' data-id='{{v.id}}'>修改</a>
+          <a href="#" class='btn_delete'data-id='{{v.id}}'>删除</a>
+        </td>
+      </tr>
+    {{/each}}
+  </script>
+  <script>
+    var pageNum = 1;
+    var pageSize = 10;
+    showTpl()
+   function showTpl () {
+    $.ajax({
+      type: 'get',
+      url: '../api/findUsers.php',
+      data: {
+        pageNum: pageNum,
+        pageSize: pageSize,
+      },
+      beforeSend: function () {
+        $('.mask').css('display',' block')
+        $('.mask').addClass('addimg');
+      },
+      success: function (info) {
+        console.log(info);
+        var html = template('tpl', info);
+        $('tbody').html(html);
+        $('.mask').css('display',' none')
+        $('.mask').removeClass('addimg');
+
+        $('#paging').bootstrapPaginator({
+          bootstrapMajorVersion: 3,
+          size:'small',
+          currentPage: pageNum,
+          totalPages: Math.ceil(info.total / pageSize),
+          onPageClicked: function (a, b, c, page) {
+           pageNum = page;
+           showTpl()
+          },
+        });
+      }
+    });
+   };
+
+   $('tbody').on('click','.btn_delete',function() {
+     $('#delete').modal('show');
+    var id =  $(this).data('id');
+    $('.delete_make').data('id',id);
+   });
+
+
+   $('.delete_make').on('click',function() {
+     var id = $('.delete_make').data('id');
+     $.ajax({
+       type:'post',
+       url:'../api/removeUser.php',
+       data:{
+         id:id,
+       },
+       beforeSend:function() {
+         $('.delete_make').addClass('addimg')
+       },
+       success:function(info) {
+         if (info.status=== 'ok') {
+          $('.delete_make').removeClass('addimg')
+          $('#delete').modal('hide');
+           showTpl()
+         }
+       }
+     });
+   });
+ 
+   $('.addbtn').on('click',function() {
+     $('#add').modal('show');
+   });
+  $('.add_btn').on('click',function() {
+   
+    $.ajax({
+      type:'post',
+      url:'../api/saveUser.php',
+      data:$('#add form').serialize(),
+      beforeSend:function() {
+        $('.add_btn').addClass('addimg');
+      },
+      success:function(info) {
+        if (info.status === 'ok') {
+          $('#add').modal('hide');
+          $('.add_btn').removeClass('addimg');
+          $('#add form')[0].reset();
+          pageNum = 1;
+          showTpl();
+        }
+      },
+    });
+  });
+   
+  $('tbody').on('click','.btn_alter',function() {
+    
+  var id = $(this).data('id');
+  $.ajax({
+    type:'get',
+    url:'../api/findUserById.php',
+    data:{
+      id:id,
+    },
+    success:function(info) {
+   
+      $('#id').val(info.id);
+      $('#name').val(info.name);
+      $('#sex').val(info.sex);
+      $('#academy').val(info.academy);
+      $('#introduce').val(info.introduce);
+      $('#alter').modal('show');
+    }
+  });
+
+  });
+  $('.alter_btn').on('click',function() {
+    $.ajax({
+      type:'post',
+      url:'../api/updateUser.php',
+      data:$('#alter form').serialize(),
+      
+      beforeSend:function() {
+        $('.alter_btn').addClass('addimg');
+      },
+      success:function(info) {
+
+        if (info.status === 'ok') {
+          $('#alter form')[0].reset();
+          $('.alter_btn').removeClass('addimg')
+          $('#alter').modal('hide');
+          
+          showTpl();
+        }
+      }
+    })
+
+  });
+  </script>
+</body>
+
+</html>
